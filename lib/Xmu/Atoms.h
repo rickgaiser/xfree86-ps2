@@ -62,7 +62,8 @@ extern AtomPtr
     _XA_TARGETS,
     _XA_TEXT,
     _XA_TIMESTAMP,
-    _XA_USER;
+    _XA_USER,
+    _XA_UTF8_STRING;
 
 #define XA_ATOM_PAIR(d)		XmuInternAtom(d, _XA_ATOM_PAIR)
 #define XA_CHARACTER_POSITION(d) XmuInternAtom(d, _XA_CHARACTER_POSITION)
@@ -86,6 +87,7 @@ extern AtomPtr
 #define XA_TEXT(d)		XmuInternAtom(d, _XA_TEXT)
 #define XA_TIMESTAMP(d)		XmuInternAtom(d, _XA_TIMESTAMP)
 #define XA_USER(d)		XmuInternAtom(d, _XA_USER)
+#define XA_UTF8_STRING(d)	XmuInternAtom(d, _XA_UTF8_STRING)
 
 _XFUNCPROTOBEGIN
 

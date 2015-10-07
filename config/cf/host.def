@@ -1,0 +1,55 @@
+/* local setting for GSX */
+
+#define BuildScreenSaverLibrary NO
+#define BuildXF86MiscLibrary    NO
+#define BuildXF86DGALibrary     NO
+#define BuildXF86VidModeLibrary NO
+#define BuildDPMSLibrary        NO
+#define BuildXF86MiscExt                NO
+#define BuildXF86DGA                    NO
+#define BuildDPMSExt    NO
+#define BuildXF86VidModeExt    NO
+
+#undef BuildXInputExt
+#define BuildXInputExt         YES
+#define JoystickSupport        YES
+
+#undef BuildPexExt
+#define BuildPexExt            NO
+#undef BuildXIE
+#define BuildXIE               NO
+#undef	BuildScreenSaverExt
+#define BuildScreenSaverExt	NO
+
+#undef BuildLBX
+#define	BuildLBX NO
+
+#undef DefaultCCOptions
+#define DefaultCCOptions
+
+#define CrossCompiling		YES
+#define HostCcCmd gcc
+#include <cross.rules>
+
+#undef i386Architecture
+#define MipselArchitecture
+
+#undef OptimizedCDebugFlags
+#define OptimizedCDebugFlags 	-O2
+#define ServerCDebugFlags	-O2
+#undef StandardDefines
+#define StandardDefines 	-Dlinux -D__MIPSEL__ -D_GNU_SOURCE
+#undef CcCmd
+#define CcCmd mips64el-unknown-linux-gnu-gcc
+#define StdIncDir /usr/local/ps2/mips64el-unknown-linux-gnu/include
+#define PreIncDir 
+#undef PostIncDir
+#define PostIncDir /usr/local/ps2/mips64el-unknown-linux-gnu/include
+#undef CplusplusCmd
+#define HasCplusplus YES
+#define CplusplusCmd mips64el-unknown-linux-gnu-g++
+#undef CppCmd
+#define CppCmd mips64el-unknown-linux-gnu-cpp
+#define DoRanlibCmd YES
+#define RanlibCmd mips64el-unknown-linux-gnu-ranlib
+#define ForceNormalLib		YES

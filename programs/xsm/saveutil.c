@@ -532,7 +532,7 @@ char *session_name;
 
 
 Bool
-getline(pbuf, plen, f)
+getnextline(pbuf, plen, f)
 char	**pbuf;
 int	*plen;
 FILE	*f;

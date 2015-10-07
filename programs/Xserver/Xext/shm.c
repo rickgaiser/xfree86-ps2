@@ -111,7 +111,7 @@ static ShmDescPtr Shmsegs;
 static Bool sharedPixmaps;
 static int pixmapFormat;
 static int shmPixFormat[MAXSCREENS];
-static ShmFuncsPtr shmFuncs[MAXSCREENS];
+ShmFuncsPtr shmFuncs[MAXSCREENS];
 static ShmFuncs miFuncs = {NULL, miShmPutImage};
 static ShmFuncs fbFuncs = {fbShmCreatePixmap, fbShmPutImage};
 

@@ -592,6 +592,10 @@ XCOMM $XFree86: xc/config/cf/Imake.cf,v 3.34.2.14 1999/07/29 09:22:23 hohndel Ex
 #     undef __ARM_ARCH_3__
 #   endif
 # endif
+# ifdef __mips__
+#  define MipsArchitecture
+#  undef __mips__
+# endif
 #endif /* linux */
 
 #if (defined(__Lynx__) || defined(Lynx)) && (defined(i386) || defined(__i386__) || defined(__x86__) || defined(__powerpc__) || defined(__sparc__) || defined(sparc))

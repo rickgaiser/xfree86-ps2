@@ -34,6 +34,12 @@ in this Software without prior written authorization from the X Consortium.
 
 # include   "misprite.h"
 
+#ifdef MITSHM
+#define _XSHM_SERVER_
+#include "extensions/shmstr.h"
+#endif
+
+
 /*
  * per screen information
  */
@@ -68,6 +74,10 @@ typedef struct {
     ColormapPtr	    pColormap;
     VisualPtr	    pVisual;
     miSpriteCursorFuncPtr    funcs;
+#ifdef MITSHM
+    ShmFuncs        shmFuncs;
+    ShmFuncsPtr     orgShmFuncsPtr;
+#endif
 } miSpriteScreenRec, *miSpriteScreenPtr;
 
 #define SOURCE_COLOR	0

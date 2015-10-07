@@ -1,0 +1,165 @@
+
+#include <Server.tmpl>
+
+#ifdef i386MachArchitecture
+        KBD = xf86KbdMach
+#else
+# ifdef i386BsdArchitecture
+        KBD = xf86KbdBSD
+# else
+#  ifdef LinuxArchitecture
+        KBD = xf86KbdLnx
+#  else
+        KBD = xf86Kbd
+#  endif
+# endif
+#endif
+
+#if BuildXKB
+     XKBDDXSRC = xf86XKB.c
+     XKBDDXOBJ = xf86XKB.o
+#endif
+
+  XCONFIGSRC = xf86Config
+ XCONFIGFILE = XGSConfig
+
+#if BuildXInputExt
+
+#define Ps2PadSupport	YES
+
+ XF86_XINPUT_SRC = xf86Xinput.c xf86Switch.c
+ XF86_XINPUT_OBJ = xf86Xinput.o xf86Switch.o
+# if JoystickSupport
+      JOYSTICK_SRC = xf86Jstk.c
+# endif
+# if Ps2PadSupport
+	PS2PAD_SRC = ps2Pad.c
+# endif
+# if ! BuildDynamicLoading
+    XINPUT_DEVICES = JoystickDefines
+#  if JoystickSupport
+      JOYSTICK_OBJ = xf86Jstk.o
+#  endif
+# else
+ SHARED_CFLAGS = PositionIndependentCFlags $(MODULEDEFINES)
+#  if JoystickSupport
+   ARCH_JSTK = lnx_jstk.o
+#  endif
+# endif
+#endif
+
+
+#if !defined(LynxOSArchitecture) && !defined(OS2Architecture)
+ PNP_MOUSE_SRC=xf86_PnPMouse.c
+ PNP_MOUSE_OBJ=xf86_PnPMouse.o
+ PNP_MOUSE_DEFINES=-DPNP_MOUSE
+#endif
+
+#if BuildDynamicLoading
+#  if PexDynamicModule
+   PEX_MODULE_DEFINES = -DPEX_MODULE
+#  endif
+#  if XieDynamicModule
+   XIE_MODULE_DEFINES = -DXIE_MODULE
+#  endif
+   XF86DL_SRC = xf86Dl.c
+   XF86DL_OBJ = xf86Dl.o
+MODULEDEFINES = -DDYNAMIC_MODULE -DDEFAULT_MODULE_PATH=\"$(MODULEDIR)\" $(DLSYM_DEFINES)
+EXT_MODULES_DEFINES = $(PEX_MODULE_DEFINES) $(XIE_MODULE_DEFINES) $(GLX_DEFINES)
+#endif
+
+#ifndef XF86ExpireServer
+#define XF86ExpireServer	NO
+#endif
+
+#if BuildXInputExt
+XINPUT_DEV_SRCS = \
+        $(JOYSTICK_SRC) $(PS2PAD_SRC)
+
+XINPUT_DEV_OBJS = \
+        $(JOYSTICK_OBJ)
+#endif
+
+OSSUPPORT_SRC = lnx_init.c lnx_io.c std_kbdEv.c std_mouse.c std_mseEv.c posix_tty.c VTsw_usl.c
+OSSUPPORT_OBJ = lnx_init.o lnx_io.o std_kbdEv.o std_mouse.o std_mseEv.o posix_tty.o VTsw_usl.o
+
+SRCS =	\
+	$(XF86DL_SRC) \
+	$(XCONFIGSRC).c \
+	xf86IniExt.c \
+	xf86Events.c \
+	xf86Init.c \
+	xf86Io.c \
+	xf86_Mouse.c \
+	xf86_Option.c \
+	$(KBD).c \
+        $(XF86_XINPUT_SRC) \
+        $(XINPUT_DEV_SRCS) \
+	$(XKBDDXSRC) \
+	$(OSSUPPORT_SRC)
+
+OBJS = \
+	$(XF86DL_OBJ) \
+	$(XCONFIGSRC).o \
+	xf86Events.o \
+	xf86Init.o \
+	xf86IniExt.o \
+	xf86Io.o \
+	xf86_Mouse.o \
+	xf86_Option.o \
+	$(KBD).o \
+        $(XF86_XINPUT_OBJ) \
+        $(XINPUT_DEV_OBJS) \
+	$(XKBDDXOBJ) \
+	$(OSSUPPORT_OBJ)
+
+   INCLUDES = -I. -I.. -I$(SERVERSRC)/mfb -I$(SERVERSRC)/mi \
+              -I$(SERVERSRC)/include -I$(SERVERSRC)/os \
+              -I$(XINCLUDESRC) -I$(EXTINCSRC)
+
+     OSNAME = OSName
+   OSVENDOR = OSVendor
+  OSNAMEDEF = -DOSNAME='"$(OSNAME)"' -DOSVENDOR='"$(OSVENDOR)"'
+CONSDEFINES = XFree86ConsoleDefines
+EXP_DEFINES = -DEXPIRY_TIME=XF86ServerExpiry $(EXP_FORCE_DEFINES)
+
+GSXDEF = -DGSXMOUSEON  -DXF86_QUEUE_SIZE=128
+
+    DEFINES = $(XCONFIGDEFINES) $(CONSDEFINES) $(PNP_MOUSE_DEFINES) $(GSXDEF)
+
+all:: $(OBJS)
+
+#if BuildXInputExt
+SpecialObjectRule(xf86Xinput.o,xf86Xinput.c $(ICONFIGFILES),$(XINPUT_DEVICES) $(MODULEDEFINES))
+SpecialObjectRule(xf86Switch.o,xf86Switch.c $(ICONFIGFILES),$(XINPUT_DEVICES) $(MODULEDEFINES))
+# if BuildDynamicLoading
+SpecialObjectRule(xf86Dl.o,xf86Dl.c,$(MODULEDEFINES))
+#  if JoystickSupport
+SpecialObjectRule(lnx_jstk.o,lnx_jstk.c,$(SHARED_CFLAGS))
+SpecialObjectRule(xf86Jstk.o,xf86Jstk.c,$(SHARED_CFLAGS))
+DynamicModuleTarget(xf86Jstk.so,xf86Jstk.o $(ARCH_JSTK))
+InstallDynamicModule(xf86Jstk.so,$(MODULEDIR))
+#  endif
+#  if Ps2PadSupport
+SpecialObjectRule(ps2Pad.o,ps2Pad.c,$(SHARED_CFLAGS))
+DynamicModuleTarget(ps2Pad.so,ps2Pad.o)
+InstallDynamicModule(ps2Pad.so,$(MODULEDIR))
+#  endif
+# endif
+#endif
+
+SpecialObjectRule($(XCONFIGSRC).o,$(XCONFIGSRC).c,\
+'-DSERVER_CONFIG_FILE="$(LIBDIR)/$(XCONFIGFILE)"' \
+'-DXCONFIGFILE="$(XCONFIGFILE)"' \
+$(MODULEDEFINES) $(EXT_DEFINES))
+SpecialObjectRule(xf86Init.o,xf86Init.c $(ICONFIGFILES),$(OSNAMEDEF) $(EXT_DEFINES) $(BETADEFS))
+SpecialCObjectRule(xf86Events,$(ICONFIGFILES),$(EXT_DEFINES))
+SpecialObjectRule(xf86IniExt.o,xf86IniExt.c $(ICONFIGFILES),$(EXT_DEFINES) $(EXT_MODULES_DEFINES))
+
+NormalLibraryObjectRule()
+NormalLibraryTarget(gsxinput,$(OBJS))
+
+LinkFile(xf86IniExt.c,$(SERVERSRC)/mi/miinitext.c)
+InstallLinkKitLibrary(xf86,$(LINKKITDIR)/lib86)
+
+DependTarget()

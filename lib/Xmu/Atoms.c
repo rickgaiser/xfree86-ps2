@@ -92,6 +92,7 @@ DeclareAtom(XA_TARGETS,			"TARGETS"		)
 DeclareAtom(XA_TEXT,			"TEXT"			)
 DeclareAtom(XA_TIMESTAMP,		"TIMESTAMP"		)
 DeclareAtom(XA_USER,			"USER"			)
+DeclareAtom(XA_UTF8_STRING,		"UTF8_STRING"		)
 
 /******************************************************************
 

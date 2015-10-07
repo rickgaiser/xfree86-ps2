@@ -50,6 +50,11 @@ in this Software without prior written authorization from the X Consortium.
 # include   "dixfontstr.h"
 # include   "fontstruct.h"
 
+#ifdef MITSHM
+extern ShmFuncsPtr shmFuncs[];
+static void miSpriteShmPutImage();
+#endif
+
 /*
  * screen wrappers
  */
@@ -290,6 +295,12 @@ miSpriteInitialize (pScreen, cursorFuncs, screenFuncs)
     pPriv->colors[MASK_COLOR].red = 0;
     pPriv->colors[MASK_COLOR].green = 0;
     pPriv->colors[MASK_COLOR].blue = 0;
+#ifdef MITSHM
+    pPriv->orgShmFuncsPtr = shmFuncs[pScreen->myNum];
+    pPriv->shmFuncs = *shmFuncs[pScreen->myNum];
+    shmFuncs[pScreen->myNum] = &pPriv->shmFuncs;
+    shmFuncs[pScreen->myNum]->PutImage = miSpriteShmPutImage;
+#endif
     pScreen->devPrivates[miSpriteScreenIndex].ptr = (pointer) pPriv;
     pScreen->CloseScreen = miSpriteCloseScreen;
     pScreen->GetImage = miSpriteGetImage;
@@ -1879,6 +1890,31 @@ miSpriteUnrealizeCursor (pScreen, pCursor)
     pScreenPriv = (miSpriteScreenPtr) pScreen->devPrivates[miSpriteScreenIndex].ptr;
     return (*pScreenPriv->funcs->UnrealizeCursor) (pScreen, pCursor);
 }
+
+#ifdef MITSHM
+static void miSpriteShmPutImage(dst, pGC, depth, format, 
+			w, h, sx, sy, sw, sh, dx, dy, data)
+    DrawablePtr dst;
+    GCPtr	pGC;
+    int		depth, w, h, sx, sy, sw, sh, dx, dy;
+    unsigned int format;
+    char 	*data;
+{
+    GC_SETUP_CHEAP(dst)
+
+    if ((dst->type!=DRAWABLE_PIXMAP) && GC_CHECK((WindowPtr) dst))
+    {
+	if (ORG_OVERLAP(&pScreenPriv->saved,dst->x,dst->y,
+			dx,dy,sw,sh))
+ 	{
+	    miSpriteRemoveCursor (dst->pScreen);
+	}
+    }
+
+    (*pScreenPriv->orgShmFuncsPtr->PutImage) (dst, pGC, depth, format, 
+    			w, h, sx, sy, sw, sh, dx, dy, data);
+}
+#endif /* MITSHM */
 
 static void
 miSpriteSetCursor (pScreen, pCursor, x, y)

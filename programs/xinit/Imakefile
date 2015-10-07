@@ -35,9 +35,11 @@ InstallNonExecFile(xinitrc.cmd,$(XINITDIR))
 InstallNamedProg(startx,startx,$(BINDIR))
 InstallManPage(startx,$(MANDIR))
 
-#if InstallXinitConfig
-InstallNonExecFile($(SAMPLECONFIG),$(XINITDIR))
-#else
-InstallNonExecFileNoClobber($(SAMPLECONFIG),$(XINITDIR))
-#endif
+XCOMM Red Hat gets this from a different package
+XCOMM #if InstallXinitConfig
+XCOMM InstallNonExecFile($(SAMPLECONFIG),$(XINITDIR))
+XCOMM #else
+XCOMM InstallNonExecFileNoClobber($(SAMPLECONFIG),$(XINITDIR))
+XCOMM #endif
+
 #endif

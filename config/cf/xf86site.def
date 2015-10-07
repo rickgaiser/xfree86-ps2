@@ -66,9 +66,9 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  *
  * This should automatically get set correctly by imake.
  *
-#define LinuxCLibMajorVersion	5
-#define LinuxClibMinorVersion	4
  */
+#define LinuxCLibMajorVersion	6
+#define LinuxClibMinorVersion	0
 
 /*
  * If you want to use the GNU malloc library, uncomment this
@@ -101,8 +101,8 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  * Note: version 4.0 or 4.1 is required, and XF86Setup links it statically by
  * default.
  *
-#define HasTk			YES
  */
+#define HasTk			YES
 
 /*
  * Set the paths and names for your Tk library if they don't match the
@@ -115,25 +115,26 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  *
  * Some Linux releases need TkLibDir set to /usr/X11R6/lib
  *
-#define TkLibDir		/usr/local/lib
-#define TkIncDir		/usr/local/include
-#define TkLibName		tk
  */
+#define TkLibDir		/usr/lib
+#define TkIncDir		/usr/include
+#define TkLibName		tk
 
 /*
  * By default, XF86Setup is linked with a static Tk library.  To change
  * that, uncomment the following line.
  *
-#define XF86SetupUsesStaticTk	NO
  */
+#define XF86SetupUsesStaticTk	NO
+
 
 /*
  * If you have Tcl (which is required to build XF86Setup), uncomment this
  * Note: version 7.4 or 7.5 is required, and XF86Setup links it statically by
  * default.
  *
-#define HasTcl			YES
  */
+#define HasTcl			YES
 
 /*
  * Set the paths and names for your Tcl library if they don't match the
@@ -143,17 +144,17 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  *
  * Some Linux releases need TclIncDir set to /usr/include/tcl.
  *
-#define TclLibDir		/usr/local/lib
-#define TclIncDir		/usr/local/include
-#define TclLibName		tcl
  */
+#define TclLibDir		/usr/lib
+#define TclIncDir		/usr/include
+#define TclLibName		tcl
 
 /*
  * By default, XF86Setup is linked with a static Tcl library.  To change
  * that, uncomment the following line.
  *
-#define XF86SetupUsesStaticTcl	NO
  */
+#define XF86SetupUsesStaticTcl	NO
 
 /*
  * Which servers do you wish to build, you can save a lot of disk space
@@ -339,8 +340,8 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  * fonts once, if this is a first time install you will want to build the
  * fonts)
  *
-#define BuildFonts		NO
  */
+#define BuildFonts		YES
 
 /*
  * To not build/install the 75dpi fonts, uncomment the following
@@ -369,8 +370,8 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
 /*
  * To not build/install the Cyrillic fonts, uncomment the following
  *
-#define BuildCyrillicFonts	NO
  */
+#define BuildCyrillicFonts	YES
 
 /*
  * To not install the local font directory, uncomment the following
@@ -400,7 +401,7 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  * will need to be built with the Joystick driver in order to be able to
  * use this.
  *
-#define JoystickSupport		NO
+#define JoystickSupport		YES
 #define WacomSupport		YES
 #define MicroTouchSupport	YES 
 #define ElographicsSupport	YES 
@@ -538,8 +539,8 @@ XCOMM $XFree86: xc/config/cf/xf86site.def,v 3.101.2.36 1999/12/28 12:13:34 hohnd
  * To forceably build static libraries in addition to shared libraries,
  * uncomment this.
  *
-#define ForceNormalLib		YES
  */
+#define ForceNormalLib		YES
 
 /*
  * Uncomment this if your default tools (eg, gcc, ld, as, etc) are

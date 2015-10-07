@@ -53,7 +53,7 @@ XTWARNINGPREFIX = XtWarningPrefix
 #endif
         DEFINES = AllocateLocalDefines $(ALIGN_DEFINES) $(POLL_DEFINES) $(MISC_DEFINES) XtExtraDefines
 
-     DB_DEFINES = -DERRORDB=\"$(LIBDIR)/XtErrorDB\" \
+     DB_DEFINES = -DERRORDB=\"$(LIBDIR)/XErrorDB\" \
 		  -DXTERROR_PREFIX=\"$(XTERRORPREFIX)\" \
 		  -DXTWARNING_PREFIX=\"$(XTWARNINGPREFIX)\"
 

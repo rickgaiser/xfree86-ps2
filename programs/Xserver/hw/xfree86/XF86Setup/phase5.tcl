@@ -38,7 +38,7 @@ if { ![getuid] } {
 	set devid [lindex $DeviceIDs $idx]
         global Device_$devid
         set server [set Device_${devid}(Server)]
-	set linkname $Xwinhome/bin/X
+	set linkname /etc/X11/X
 	set lastlink $linkname
 	for {set nlinks 0} \
 		{[file exists $linkname] && [file type $linkname]=="link" \
@@ -59,7 +59,7 @@ if { ![getuid] } {
 		unset linkname
 	    }
 	} else {
-	    set linkname $Xwinhome/bin/X
+	    set linkname ../../usr/X11R6/bin/X
 	}
     }
     if [info exists linkname] {
@@ -72,10 +72,10 @@ if { ![getuid] } {
 	    cd $linkdir
 	    catch "unlink X" ret
 	    if !$pc98 {
-		if [string match XFCom* $server] {
-		    set serverpath $Xwinhome/bin/$server
+ 	        if [catch "link ../../usr/X11R6/bin/XF86_$server X" ret] {
+		    set serverpath ../../usr/X11R6/bin/$server
 		} else {
-		    set serverpath $Xwinhome/bin/XF86_$server
+		    set serverpath ../../usr/X11R6/bin/XF86_$server
 		}
 		if [catch "link $serverpath X" ret] {
 		    mesg "Link creation failed!\n\
@@ -84,7 +84,7 @@ if { ![getuid] } {
 		    mesg "Link created successfully." okay
 	        }
 	    } else {
-	        if [catch "link $Xwinhome/bin/XF98_$server X" ret] {
+	        if [catch "link ../../usr/X11R6/bin/XF98_$server X" ret] {
 		    mesg "Link creation failed!\n\
 			    You'll have to do it yourself" okay
 	        } else {

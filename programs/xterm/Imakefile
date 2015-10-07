@@ -20,6 +20,10 @@ SCROLLBAR_RIGHT = -DSCROLLBAR_RIGHT
 #define XkbClientDefines /**/
 #endif
 
+#if InstallXtermSetUID
+#undef InstallXtermSetUID
+#endif
+
 #ifndef XkbClientDepLibs
 #define XkbClientDepLibs /**/
 #endif
@@ -49,9 +53,7 @@ module.o: ; $(CC) -c defines $(CFLAGS) module.c
          PTYLIB = -lpucc
 #endif
 
-#if ((LinuxCLibMajorVersion == 6) && (LinuxCLibMinorVersion < 1))
-         PTYLIB = -lutil
-#endif
+         PTYLIB = -lutil -lutempter
 
 #if XtermWithI18N
         I18NDEF = -DI18N

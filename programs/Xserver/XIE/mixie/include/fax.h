@@ -72,7 +72,9 @@ terms and conditions:
 
 ******************************************************************************/
 
-#include <stdio.h>
+#ifndef NULL
+#define NULL 0
+#endif
 
 /***	entry points */
 extern int decode_g4();

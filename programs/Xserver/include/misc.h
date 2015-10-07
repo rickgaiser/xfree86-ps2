@@ -158,11 +158,11 @@ typedef struct _xReq *xReqPtr;
 
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #define max(a, b) (((a) > (b)) ? (a) : (b))
-#if !defined(AMOEBA) && !defined(__EMX__)
+#if !defined(AMOEBA) && !defined(__EMX__) && !defined(__linux__)
 #ifndef abs
 #define abs(a) ((a) > 0 ? (a) : -(a))
 #endif
-#else /* AMOEBA || __EMX__ */
+#else /* AMOEBA || __EMX__ || __linux__ */
 /* abs() is a function, not a macro; include the file declaring
  * it in case we haven't done that yet.
  */  

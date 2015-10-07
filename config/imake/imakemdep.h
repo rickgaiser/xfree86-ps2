@@ -330,6 +330,9 @@ char *cpp_argv[ARGUMENTS] = {
 # ifdef __i386__
 	"-D__i386__",
 # endif
+# ifdef __alpha__
+	"-D__alpha__",
+# endif
 # ifdef __sparc__
 	"-D__sparc__",
 # endif
@@ -988,6 +991,9 @@ struct symtab	predefs[] = {
 #endif
 #ifdef __QNXNTO__
 	{"__QNXNTO__", "1"},
+#endif
+#if defined(__mips__) && defined(__linux__)
+#include "mipslinux_md.h"
 #endif
 	/* add any additional symbols before this line */
 	{NULL, NULL}

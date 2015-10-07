@@ -106,10 +106,11 @@ XCOMM site:  $XFree86: xc/config/cf/site.def,v 3.17.2.1 1997/06/22 10:32:21 dawe
 */
 
 /*
-#undef DefaultUserPath
-#define DefaultUserPath /bin:/usr/bin:$(BINDIR):/usr/ucb:/usr/local/bin
 */
-
+#undef DefaultUserPath
+#define DefaultUserPath /usr/local/bin:/bin:/usr/bin
+#undef DefaultSystemPath
+#define DefaultSystemPath /sbin:/usr/sbin:/bin:/usr/bin
 
 /* You do NOT need SetUID if you only run the server under xdm */
 /* You MAY need SetUID if users run the server by hand or under xinit */
@@ -128,6 +129,11 @@ XCOMM site:  $XFree86: xc/config/cf/site.def,v 3.17.2.1 1997/06/22 10:32:21 dawe
 #define InstallXserverSetUID YES
 #endif
 */
+
+/* Xserver for GS */
+#define GsxServer YES
+#define ServerToInstall		Xgsx
+#define UseXserverWrapper YES
 
 #include <host.def>
 

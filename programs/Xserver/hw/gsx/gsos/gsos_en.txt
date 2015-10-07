@@ -1,0 +1,555 @@
+
+       Copyright 2001 Sony Corporation.
+       Copyright (C) 2000  Sony Computer Entertainment Inc.
+                     All Rights Reserved.
+
+
+----------------------------------------------------------------------
+Purpose
+----------------------------------------------------------------------
+
+On porting the Xserver to PS2 Linux, it is necessary to implement the 
+ddx layer for the Graphics Sythesizer (GS). The gsos layer is desgined 
+to help implementing the GS ddx layer. It provides an abstraction for 
+device driver I/F. Also, it allows the ddx layer fouce to build DMA 
+packets and duplexing the DMA transfer buffers, increasing the efficiency 
+and speed. 
+
+
+                 Xserver
+          +--------------------+
+          |        dix         |
+          +--------------------+
+          |      hw/gsx(=ddx)  |
+          +--------------------+
+
+          +--------------------+
+          |        gsos        |
+          +--------------------+
+       ---------------------------------
+          +--------------------+  Kernel
+          |   device driver    |
+          +--------------------+
+          +--------------------+
+          |      EE-GS hw      |
+          +--------------------+
+
+
+----------------------------------------------------------------------
+How to use the device
+----------------------------------------------------------------------
+
+[1] Initialization
+
+        // Initializing gsos
+        gsosOpen();
+
+#define GS_FRAME_BASE 0
+#define GS_FRAME_MASK 0
+
+	// Setting the screen mode
+	gsosSetScreen(PS2_GS_VESA,		// mode
+		PS2_GS_1024x768|PS2_GS_75Hz,	// res
+		1024,768,			// width, height
+		GS_FRAME_BASE,			// fbp
+		PS2_GS_PSMCT32,			// psm
+		GS_FRAME_MASK,			// fbmask
+		0,				// odd_even_mix
+		0,0				// margin_x, margin_y
+		);
+
+[2] Setting the DMA data and the DMA transfer
+
+        // Setting Giftag
+        gsosMakeGiftag(1, 
+		GSOS_GIF_PRE_IGNORE, 0, GSOS_GIF_PACKED, 1, 
+		GSOS_GIF_REG_AD);
+
+        // Setting the packet data
+        gsosSetPacketAddrData(GSOS_PRIM, GSOS_PRIM_POINT);
+
+        // Setting Giftag
+        gsosMakeGiftag(nloop, 
+                GSOS_GIF_PRE_IGNORE, 0, GSOS_GIF_PACKED, 2,
+                (GSOS_XYZ2 << 4) | GSOS_RGBA);
+
+        // Setting the packet data
+        for(lp = 0 ; lp < nloop ; lp++){
+            gsosSetPacket4(r[lp], g[lp], b[lp], a[lp]);
+            gsosSetPacket4(x[lp], y[lp], z[lp], 0);
+        }
+
+        // Opening the DMA transfer
+        gsosKick();
+
+[3] Closing process
+
+        // Closing gsos
+        gsosClose();
+
+----------------------------------------------------------------------
+TYPE
+----------------------------------------------------------------------
+
+    GSOSint        int
+    GSOSuint       unsigned int
+    GSOSshort      short
+    GSOSushort     unsigned short
+    GSOSchar       char
+    GSOSuchar      unsigned char
+    GSOSfloat      float
+    GSOSdouble     double
+    GSOSbit64      unsigned long long
+
+----------------------------------------------------------------------
+GSOSpacket                    Packet structure
+----------------------------------------------------------------------
+
+    typedef struct {
+        GSOSbit64    u64[2];
+        GSOSuint     u32[4];
+    } GSOSpacket;
+
+
+GSOSpacket denotes GIF packet.
+
+----------------------------------------------------------------------
+gsosOpen                      It opens GSOS.
+----------------------------------------------------------------------
+
+[Format]
+        int gsosOpen()
+
+[Return values]
+        0:    Normal termination
+        Ohterwise: Error
+
+[Description]
+	It initializes GSOS.
+	It opens the GS device and the memory device, reserves the DMA transfer 
+	buffer and stores the current screen mode.
+
+----------------------------------------------------------------------
+gsosClose                     It closes GSOS.
+----------------------------------------------------------------------
+
+[Format]
+        int gsosClose()
+
+[Return values]
+        0:    Normal termination
+        Ohterwise: Error
+
+[Description]
+       	It finishes GSOS.
+	It releases the reserved DMA transfer buffer and closes the device 
+	after restoring the screen mode.
+
+----------------------------------------------------------------------
+gsosSetScreen		It sets the screen mode.
+----------------------------------------------------------------------
+
+[Format]
+	void gsosSetScreen(
+	         int	mode,
+	         int	res,
+	         int	w,
+		 int	h,
+	         int	fbp,
+	         int	psm,
+		 unsinged int	fbmask;
+		 int	odd_even_mix,
+		 int	dx,
+		 int	dy)
+
+[Arguments]
+	mode:		Video signal mode
+	res:		Resolution/interlace mode
+	w:		Width of the display area
+	h:		Height of the display area
+	fbp:		FBP portion of FRAME_1 register 
+			(Frame buffer base pointer)
+	psm:		PSM portion of FRAME_1 register (Pixel format)
+	fbmask:		FBMASK portion of FRAME_1 register (Frame mask)
+	odd_even_mix:	odd-even line mixing raito
+	dx:		x margin
+	dy:		y margin
+
+[Description]
+	It sets the screen mode of the GS Console and clears the frame buffer.
+
+----------------------------------------------------------------------
+gsosMakeGiftag                It sets Giftag.
+----------------------------------------------------------------------
+
+[Format]
+        int gsosMakeGiftag(
+                GSOSbit64    nloop,
+                GSOSbit64    pre,
+                GSOSbit64    prim,
+                GSOSbit64    flg,
+                GSOSbit64    nreg,
+                GSOSbit64    *regs)
+
+[Arguments]
+        nloop   Number of loops
+        pre     PRIM field enable
+                    GSOS_GIF_PRIM_IGNORE: It ignores the PRIM field.
+                    GSOS_GIF_PRIM_ENABLE: 
+			It sets the value of the PRIM field to the 
+			PRIM register.
+        prim    Data to be set to the PRIM register of the GS
+        flg     Data format
+                    GSOS_GIF_FLG_PACKED : PACKED mode
+                    GSOS_GIF_FLG_REGLIST: REGLIST mode
+                    GSOS_GIF_FLG_IMAGE  : IMAGE mode
+        nreg    Number of register descriptors.  0 represents 16 pieces.
+        regs    Register descriptor (4 bits, maximum 16 pieces)
+                    GSOS_GIF_REG_PRIM
+                    GSOS_GIF_REG_RGBAQ
+                    GSOS_GIF_REG_ST
+                    GSOS_GIF_REG_UV
+                    GSOS_GIF_REG_XYZF2
+                    GSOS_GIF_REG_XYZ2
+                    GSOS_GIF_REG_TEX0_1
+                    GSOS_GIF_REG_TEX0_2
+                    GSOS_GIF_REG_CLAMP_1
+                    GSOS_GIF_REG_CLAMP_2
+                    GSOS_GIF_REG_FOG
+                    GSOS_GIF_REG_XYZF3
+                    GSOS_GIF_REG_XYZ3
+                    GSOS_GIF_REG_AD
+                    GSOS_GIF_REG_NOP
+
+[Return values]
+        0:    Normal termination
+        Otherwise: Error
+
+[Description]
+	It sets GIFtag to the current DMA transfer buffer.  When the GIF 
+	packet cannot be stored in the current buffer, gsosExec() or 
+	gsosKick() is executed.  
+	If the GIF packet cannot be stored yet, it returns error.
+
+----------------------------------------------------------------------
+gsosSetPacket2                It sets data to a packet.
+----------------------------------------------------------------------
+
+[Format]
+        void gsosSetPacket2(
+                GSOSbit64    data1,
+                GSOSbit64    data2)
+
+[Arguments]
+        data1   Lower 64bits
+        data2   Upper 64bits
+
+[Description]
+        It sets the DMA transfer data to the current DMA transfer buffer.
+        128        96        64        32        0
+         +---------+---------+---------+---------+
+         |       data2       |       data1       |
+         +---------+---------+---------+---------+
+
+----------------------------------------------------------------------
+gsosSetPacket4                It sets data to a packet.
+----------------------------------------------------------------------
+
+[Format]
+        void gsosSetPacket4(
+                GSOSbit64    data1,
+                GSOSbit64    data2,
+                GSOSbit64    data3,
+                GSOSbit64    data4)
+
+[Arguments]
+        data1   The least significant 32 bits
+        data2   The next least significant 32 bits
+        data3   The next most significant 32 bits
+        data4   The most significant 32 bits
+
+[Description]
+	It's used for building GIF packets having PACKED mode and RGBAQ 
+	or ST type.  It sets the DMA transfer data to the current DMA 
+	transfer buffer.
+
+        128        96        64        32        0
+         +---------+---------+---------+---------+
+         |  data4  |  data3  |  data2  |  data1  |
+         +---------+---------+---------+---------+
+
+
+----------------------------------------------------------------------
+gsosSetPacketAddrData        It sets data to a packet.
+----------------------------------------------------------------------
+
+[Format]
+        void gsosSetPacketAddrData(
+                GSOSbit64    addr,
+                GSOSbit64    data)
+
+[Arguments]
+        addr    Address of GS register.
+        data    Data
+
+[Description]
+	It's used for building GIF packets having PACKED mode and A+D type.
+        It sets the DMA transfer data to the current DMA transfer buffer.
+
+        128        96        64        32        0
+         +---------+---------+---------+---------+
+         |       addr        |       data        |
+         +---------+---------+---------+---------+
+
+----------------------------------------------------------------------
+gsosSetPacketAddrData4       It sets data to a packet.
+----------------------------------------------------------------------
+
+[Format]
+        void gsosSetPacketAddrData4(
+                GSOSbit64    addr,
+                GSOSbit64    data1,
+                GSOSbit64    data2,
+                GSOSbit64    data3,
+                GSOSbit64    data4)
+
+[Arguments]
+        addr    Address of GS register.
+        data1   The least significant 16 bits
+        data2   The next least significant 16 bits
+        data3   The next most significant 16 bits
+        data4   The most significant 16 bits
+
+[Description]
+	It's used for building GIF packets having PACKED mode and A+D type.
+        It sets the DMA transfer data to the current DMA transfer buffer.
+
+        128        96        64   48   32   16   0
+         +---------+---------+----+----+----+----+
+         |       addr        |dat4|dat3|dat2|dat1|
+         +---------+---------+----+----+----+----+
+
+----------------------------------------------------------------------
+gsosSetXyPackedXYZ2       It sets data to a packet.
+----------------------------------------------------------------------
+
+[Format]
+	void gsosSetXyPackedXYZ2(
+		unsigned short x,
+		unsigned short y)
+
+
+[Arguments]
+        x   X portion of the PACKED mode and XYZ2 type packet.
+        y   Y portion of the PACKED mode and XYZ2 type packet.
+
+[Description]
+	It's used for building GIF packets having PACKED mode and XYZ2 type.
+        It sets the DMA transfer data to the current DMA transfer buffer.
+        128        96        64   48   32   16   0
+         +---------+---------+----+----+----+----+
+         |                   |    | Y  |    | X  |
+         +---------+---------+----+----+----+----+
+
+----------------------------------------------------------------------
+gsosKick                      It starts the DMA transfer. 
+----------------------------------------------------------------------
+
+[Format]
+        void gsosKick()
+
+[Arguments]
+        None
+
+[Description]
+        It executes the DMA transfer of the data set to the current DMA 
+	transfer buffer.  Eop of GIFtag is set to 1 at this time.  It 
+	switches the buffer after the transfer.
+
+----------------------------------------------------------------------
+gsosExec                      It informs DMA is startable.
+----------------------------------------------------------------------
+
+[Format]
+        void gsosExec()
+
+[Arguments]
+        None
+
+[Description]
+        Same as gsosKick() if GSOS_LAZY_EXEC is not defined. 
+	Otherwise, do nothing.
+
+----------------------------------------------------------------------
+gsosReadImage                 It reads an image.
+----------------------------------------------------------------------
+
+[Format]
+        int gsosReadImage(
+                int          x,
+                int          y,
+                int          w,
+                int          h,
+                unsigned int bp,
+                int          bw,
+                int          psm,
+                GSOSuchar     *pPix)
+
+[Arguments]
+        x       x coordinate
+        y       y coordinate
+        w       Width
+        h       Height
+        bp      Base pointer of the buffer
+        bw      Width of the buffer
+        psm     Pixel format
+        pPix    Buffer that stores the read data
+
+[Return values]
+        0:    Normal termination
+        Except 0: Error
+
+[Description]
+        It reads the image data of pPix in the width of w and in the height 
+	of h from (x,y) of pDraw.
+
+----------------------------------------------------------------------
+gsosWriteImage                It writes an image.
+----------------------------------------------------------------------
+
+[Format]
+        int gsosWriteImage(
+                int          x,
+                int          y,
+                int          w,
+                int          h,
+                unsigned int bp,
+                int          bw,
+                int          psm,
+                GSOSuchar     *pPix)
+
+[Arguments]
+        pGC     GC
+        pDraw   Drawable to be written
+        x       x coordinate
+        y       y coordinate
+        w       Width
+        h       Height
+        bp      Base pointer of the buffer
+        bw      Width of the buffer
+        psm     Pixel format
+        pPix    Buffer that stores the data to be written
+
+[Return values]
+        0:    Normal termination
+        Except 0: Error
+
+[Description]
+        It writes the image data of pPix in the width of w and in the height 
+	of h to (x,y) of pDraw.
+
+----------------------------------------------------------------------
+gsosCalcPrimSize	It calculates the primitive size (number of bytes).
+----------------------------------------------------------------------
+
+[Format]
+	int gsosCalcPrimSize(int nreg, int flag)
+
+[Arguments]
+	nreg:		Number of using registers
+	flag:		Data format
+
+[Return value]
+	It is the number of bytes that one primitive uses.
+
+[Description]
+        It calculates the buffer size that the primitive uses from the number 
+	of using registers and the data format.
+
+----------------------------------------------------------------------
+gsosCalcPacketSize	It calculates the GIF packet size.
+----------------------------------------------------------------------
+
+[Format]
+	int gsosCalcPacketSize(int nloop, int nreg, int flag)
+
+[Arguments]
+	nloop:		Number of loops
+	nreg:		Number of using registers
+	flag:		Data format
+
+[Return value]
+	It is a GIF packet size.
+
+[Description]
+	It calculates the size of a GIF packet.
+
+----------------------------------------------------------------------
+gsosRemainBufSize	It returns the remaining size of the DMA buffer.
+----------------------------------------------------------------------
+
+[Format]
+	int gsosRemainBufSize()
+
+
+[Return value]
+	It is the number of the remaining bytes of a buffer.
+
+[Description]
+	It returns the remaining size of the current DMA transfer buffer.
+
+----------------------------------------------------------------------
+gsosCalcPacketCount	It returns the number of packets that can be stored 
+in a buffer.
+----------------------------------------------------------------------
+
+[Format]
+	int gsosCalcPacketCount(int nreg, int flag)
+
+[Arguments]
+	nreg:		Number of using registers
+	flag:		Data format
+
+[Return value]
+	It is the number of packets.
+
+[Description]
+	It returns the number of packets that can be stored in the current 
+	DMA transfer buffer.
+
+----------------------------------------------------------------------
+gsosSetEOPTerminate	It sets 1 to eop of GIFtag.
+----------------------------------------------------------------------
+
+[Format]
+	static void gsosSetEOPTerminate(void)
+
+[Description]
+	It sets 1 to the eop bit of GIFtag set last.
+	It is used in gsos.
+
+----------------------------------------------------------------------
+gsosClearFrameBuffer
+----------------------------------------------------------------------
+
+[Format]
+	static void gsosClearFrameBuffer(
+		int w, 
+		int h, 
+		int margin_w, 
+		int margin_h)
+
+[Arguments]
+	w:		Width of the display area
+	h:		Height of the display area
+	margin_w:	Addtional width for clean
+	margin_h:	Addtional height for clean
+
+
+[Description]
+	It clears the frame buffer (0,0)-(w+margin_w, h+margin_h),
+	and fills the display area (0,0)-(w,h) with light bule.
+
+
+----------------------------------------------------------------------
+

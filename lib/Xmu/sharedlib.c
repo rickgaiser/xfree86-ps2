@@ -68,5 +68,6 @@ DeclareAtom(XA_TARGETS)
 DeclareAtom(XA_TEXT)
 DeclareAtom(XA_TIMESTAMP)
 DeclareAtom(XA_USER)
+DeclareAtom(XA_UTF8_STRING)
 
 #endif /* SUNSHLIB */

@@ -61,7 +61,7 @@ XauWriteAuth (auth_file, auth)
 FILE	*auth_file;
 Xauth	*auth;
 {
-    char    *malloc ();
+//    char    *malloc ();
 
     if (write_short (auth->family, auth_file) == 0)
 	return 0;

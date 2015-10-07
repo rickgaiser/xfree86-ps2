@@ -1,3 +1,16 @@
 #!/bin/sh
-# $XConsortium: Xsetup_0,v 1.3 93/09/28 14:30:31 gildea Exp $
-xconsole -geometry 480x130-0-0 -daemon -notify -verbose -fn fixed -exitOnFail
+# Xsetup for Red Hat Linux 6.0
+# Copyright (c) 1999 Red Hat Software, Inc.
+
+pidof -s kdm > /dev/null 2>&1
+if [ $? -eq 0 -a -x /usr/bin/kdmdesktop ]; then
+  /usr/bin/kdmdesktop
+else
+  /usr/X11R6/bin/xsetroot -solid "#356390"
+fi
+
+# only set the background if the xsri program is installed
+if [ -x /usr/bin/xsri ]; then
+    /usr/bin/xsri  -geometry +5+5 -avoid 300x250 -keep-aspect \
+	/usr/share/pixmaps/redhat/redhat-transparent.png
+fi

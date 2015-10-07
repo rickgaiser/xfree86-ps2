@@ -83,11 +83,20 @@ in this Software without prior written authorization from the X Consortium.
 #   include <limits.h>
 #   undef _POSIX_SOURCE
 #  endif
+#  ifndef LINE_MAX
+#   define X_LINE_MAX 2048
+#  else
+#   define X_LINE_MAX LINE_MAX
+#  endif
 # endif
 # ifdef CSRG_BASED
 #  include <sys/param.h>	/* for MAXHOSTNAMELEN */
 # endif
 #endif /* _XOS_R_H */
+
+#ifndef PATH_MAX
+#define PATH_MAX        4096
+#endif
 
 #ifndef WIN32
 
@@ -346,6 +355,7 @@ typedef struct {
 extern int _Pgetpwuid_r(uid_t, struct passwd *, char *, size_t, struct passwd **);
 extern int _Pgetpwnam_r(const char *, struct passwd *, char *, size_t, struct passwd **);
 # endif
+#define LINE_MAX 2048
 typedef struct {
   struct passwd pws;
   char pwbuf[LINE_MAX];

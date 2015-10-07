@@ -33,7 +33,7 @@ from the X Consortium.
 
 
 static Bool
-getline (
+getnextline (
 char	**pbuf,
 int	*plen,
 FILE	*f)

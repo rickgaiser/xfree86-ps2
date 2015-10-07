@@ -42,6 +42,9 @@
 #define XSERVER_PATH	"/usr/X11R6/bin/X"
 #endif
 
+#undef XSERVER_PATH
+#define XSERVER_PATH "/etc/X11/X"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

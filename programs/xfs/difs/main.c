@@ -58,11 +58,17 @@ in this Software without prior written authorization from the X Consortium.
 #include	"servermd.h"
 #include	"cache.h"
 #include	"site.h"
+#include <unistd.h>
+#include <pwd.h>
+#include <sys/types.h>
 
 char       *ConnectionInfo;
 int         ConnInfoLen;
 
 Cache       serverCache;
+
+int         droppriv;  /* whether or not to drop root privileges at startup */
+int         becomeDaemon; /* whether or not to become a daemon */
 
 #ifndef DEFAULT_CONFIG_FILE
 #define DEFAULT_CONFIG_FILE "/usr/lib/X11/fs/config"
@@ -90,15 +96,43 @@ main(argc, argv)
     char      **argv;
 {
     int         i;
+    struct passwd *pwent;
 
     argcGlobal = argc;
     argvGlobal = argv;
+    droppriv = 0;
+    becomeDaemon = 0;
 
     configfilename = DEFAULT_CONFIG_FILE;
 
     /* init stuff */
     ProcessCmdLine(argc, argv);
     InitErrors();
+
+    /* become xfs user, if possible */
+    if ((geteuid() == 0) && droppriv) {
+      pwent = getpwnam("xfs");
+      if (pwent) {
+	if (setgid(pwent->pw_gid)) {
+	  ErrorF("fatal: couldn't set groupid to xfs user's group\n");
+	  exit(1);
+	}
+
+	if (setgroups(0, 0)) {
+	  ErrorF("fatal: couldn't drop supplementary groups\n");
+	  exit(1);
+	}
+
+	if (setuid(pwent->pw_uid)) {
+	  ErrorF("fatal: couldn't set userid to xfs user\n");
+	  exit(1);
+	}
+      }
+    } else if (droppriv) {
+      ErrorF("fatal: droppriv flag specified, but xfs not run as root\n");
+      exit(1);
+    }
+
     /*
      * do this first thing, to get any options that only take effect at
      * startup time.  it is erad again each time the server resets
@@ -107,6 +141,10 @@ main(argc, argv)
 	ErrorF("fatal: couldn't read config file\n");
 	exit(1);
     }
+
+    /* become a daemon if explicitly requested to do so. */
+    if (becomeDaemon)
+      daemon(0, 0);
 
     while (1) {
 	serverGeneration++;

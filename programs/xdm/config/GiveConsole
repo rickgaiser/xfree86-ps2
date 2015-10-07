@@ -8,3 +8,5 @@
 # causing serious grief.
 #
 chown $USER /dev/console
+/usr/X11R6/bin/sessreg  -a -w "/var/log/wtmp" -u "/var/run/utmp" \
+	-x "/etc/X11/xdm/Xservers" -l $DISPLAY -h "" $USER

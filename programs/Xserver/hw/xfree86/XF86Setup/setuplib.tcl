@@ -28,8 +28,11 @@ proc initconfig {xwinhome} {
 	set Files(FontPath)	[list $fontdir/local \
 		  $fontdir/misc:unscaled \
 		  $fontdir/75dpi:unscaled $fontdir/100dpi:unscaled \
-		  $fontdir/Type1 $fontdir/Speedo  \
-		  $fontdir/misc $fontdir/75dpi $fontdir/100dpi ]
+		  $fontdir/japanese:unscaled \
+		  $fontdir/Type1 $fontdir/Speedo \
+		  $fontdir/misc $fontdir/75dpi $fontdir/100dpi \
+		  $fontdir/japanese \
+		  $fontdir/TrueType ]
 	set Files(RGBPath)		$xwinhome/lib/X11/rgb
 	
 

@@ -437,13 +437,13 @@ XCOMM $XConsortium: xfree86.cf /main/34 1996/12/06 11:45:18 rws $
 				cirrus ncr77c22 compaq mga oak al2101 \
 				ali cl64xx video7 ark mx realtek s3_savage s3v apm \
 				s3_svga neo chips cyrix rendition p9x00 \
-				spc8110 i740 tdfx smi generic
+				spc8110 i740 tdfx i810 smi generic
 #  else
 #   define XF86SvgaDrivers	nv et4000 et3000 pvga1 gvga r128 ati sis tvga8900 \
 				cirrus ncr77c22 compaq mga oak al2101 \
 				ali cl64xx video7 ark mx realtek s3v apm \
 				s3_svga neo chips cyrix rendition p9x00 \
-				spc8110 i740 tdfx smi generic
+				spc8110 i740 tdfx i810 smi generic
 #  endif
 # endif
 #endif
@@ -708,7 +708,7 @@ XCOMM $XConsortium: xfree86.cf /main/34 1996/12/06 11:45:18 rws $
 #endif
 #endif
 #ifndef JoystickSupport
-#define JoystickSupport		NO
+#define JoystickSupport		YES
 #endif
 #ifndef CalcompSupport
 #define CalcompSupport		YES

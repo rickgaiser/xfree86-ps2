@@ -483,12 +483,12 @@ void R128AccelInit(void)
     a->ScratchBufferSize               = sizeof(info->scratch_buffer);
     a->ScratchBufferBase               = info->scratch_buffer;
     a->PingPongBuffers                 = 1;
-
+#if 0
     a->SetupForScanlineScreenToScreenColorExpand =
 	R128SetupForScanlineScreenToScreenColorExpand;
     a->SubsequentScanlineScreenToScreenColorExpand =
 	R128SubsequentScanlineScreenToScreenColorExpand;
-
+#endif
 				/* Pixmap Cache */
                                 /* x11perf -copypixpix100
 				   without: 14000.0/sec

@@ -50,8 +50,10 @@ typedef struct _XctPriv {
 #define IsMore(priv) ((priv)->ptr != (priv)->ptrend)
 #define AmountLeft(priv) ((priv)->ptrend - (priv)->ptr)
 
-extern char *malloc();
-extern char *realloc();
+//extern char *malloc();  --- for old compiler only
+//extern char *realloc(); --- for old compiler only
+extern void *malloc();
+extern void *realloc();
 
 #define HT	0x09
 #define NL	0x0a

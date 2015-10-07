@@ -234,10 +234,15 @@ struct timeval {
 #include <sys/time.h>
 #include <time.h>
 #else
+#ifdef __linux__
+#include <time.h>
+#include <sys/time.h>
+#else
 #ifndef Lynx
 #include <sys/time.h>
 #else
 #include <time.h>
+#endif /* __linux__ */
 #endif /* Lynx */
 #endif /* QNX/Nto */
 #endif /* MINIX */

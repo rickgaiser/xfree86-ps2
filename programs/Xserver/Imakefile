@@ -1816,6 +1816,48 @@ ServerTarget(Xvfb,$(XVFBDIRS),$(XVFBOBJS),$(XVFBLIBS),$(XVFBSYSLIBS))
 #endif /* XVirtualFramebufferServer */
 
 
+#if GsxServer
+XCOMM
+XCOMM server with GSX
+XCOMM
+MFBDIR   = mfb
+CFB8DIR  = cfb
+CFB16DIR = cfb16
+CFB24DIR = cfb24
+CFB32DIR = cfb32
+DDXDIR1 = hw/gsx
+GSXDIRS = $(STDDIRS) $(MFBDIR) $(CFB8DIR) $(CFB16DIR) $(CFB24DIR) $(CFB32DIR) $(DDXDIR1) $(DEPDIRS)
+XCOMM GSXOBJS = hw/gsx/common/stubs.o
+GSXINPUT = hw/gsx/common/LibraryTargetName(gsxinput)
+GSXGSOS = hw/gsx/gsos/LibraryTargetName(gsos)
+GSXCORE = hw/gsx/LibraryTargetName(gsx)
+GSXLIBS = \
+	  PreFbLibs \
+	  $(GSXCORE) \
+	  $(GSXGSOS) \
+	  $(GSXINPUT) \
+	  $(CFB8) \
+	  $(CFB16) \
+	  $(CFB24) \
+	  $(CFB32) \
+	  PostFbLibs 
+
+# GSXSYSLIBS = $(FONT) $(SYSLIBS) for xtt
+GSXSYSLIBS = $(SYSLIBS)
+#if HasParallelMake
+MakeMutex($(GSXDIRS) $(GSXOBJS) $(GSXLIBS) $(GSXSYSLIBS))
+#endif
+#if HasGnuMake
+$(GSXOBJS) $(GSXLIBS) $(GSXSYSLIBS):: $(GSXDIRS)
+	@if [ -f $@ ]; then touch $@; fi
+#endif
+SetUIDServerTarget(Xgsx,$(GSXDIRS),$(GSXOBJS),$(GSXLIBS),$(GSXSYSLIBS))
+#ifndef ServerToInstall
+#define ServerToInstall Xgsx
+#endif
+#endif /* gsxrServer */
+
+
 #if UseXserverWrapper
 #if HasPam
 SetUIDProgramTarget(Xwrapper,os/wrapper.o,NullParameter,$(PAMLIBS),NullParameter)

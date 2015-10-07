@@ -520,7 +520,7 @@ fixme: You must have ANSI/ISO colors to support AIX colors
 #endif
 
 #if OPT_DEC_CHRSET
-#define BUF_CSETS(buf, row) (buf[MAX_PTRS * (row) + OFF_CSETS])
+#define _BUF_CSETS(buf, row) (buf[MAX_PTRS * (row) + OFF_CSETS])
 #endif
 
 	/* TScreen-level macros */
@@ -533,7 +533,7 @@ fixme: You must have ANSI/ISO colors to support AIX colors
 #endif
 
 #if OPT_DEC_CHRSET
-#define SCRN_BUF_CSETS(screen, row) BUF_CSETS(screen->visbuf, row)
+#define SCRN_BUF_CSETS(screen, row) _BUF_CSETS(screen->visbuf, row)
 #endif
 
 	/* indices into save_modes[] */

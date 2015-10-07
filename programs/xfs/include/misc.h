@@ -79,7 +79,11 @@ typedef unsigned long Atom;
 
 #define	min(a, b)	(((a) < (b)) ? (a) : (b))
 #define	max(a, b)	(((a) > (b)) ? (a) : (b))
+#ifdef __linux__
+#include <stdlib.h>
+#else
 #define	abs(a)		((a) > 0 ? (a) : -(a))
+#endif
 
 #include	"os.h"
 

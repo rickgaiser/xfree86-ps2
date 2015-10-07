@@ -77,7 +77,6 @@ terms and conditions:
 /*
  *  Include files
  */
-#include <stdio.h>
 /*
  *  Core X Includes
  */

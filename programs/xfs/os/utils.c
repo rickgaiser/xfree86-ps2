@@ -101,6 +101,8 @@ char *realloc();
 #endif
 
 extern char *configfilename;
+extern int  droppriv; /* whether or not to drop root privileges */
+extern int  becomeDaemon; /* whether to become a daemon or not */
 char       *progname;
 Bool        CloneSelf;
 extern int  ListenPort;
@@ -203,7 +205,7 @@ GetTimeInMillis()
 static void
 usage()
 {
-    fprintf(stderr, "usage: %s [-config config_file] [-port tcp_port]\n",
+    fprintf(stderr, "usage: %s [-config config_file] [-port tcp_port] [-droppriv] [-daemon]\n",
 	    progname);
     exit(1);
 }
@@ -311,6 +313,10 @@ ProcessCmdLine(argc, argv)
 		ProcessLSoption (argv[++i]);
 	    else
 		usage();
+	} else if (!strcmp(argv[i], "-droppriv")) {
+	        droppriv = 1;
+	} else if (!strcmp(argv[i], "-daemon")) {
+	        becomeDaemon = 1;
 	} else if (!strcmp(argv[i], "-cf") || !strcmp(argv[i], "-config")) {
 	    if (argv[i + 1])
 		configfilename = argv[++i];

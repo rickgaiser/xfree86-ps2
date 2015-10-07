@@ -28,6 +28,7 @@ in this Software without prior written authorization from the X Consortium.
 */
 
 #include <X11/Xauth.h>
+#include <stdlib.h>
 
 static
 read_short (shortp, file)
@@ -49,7 +50,8 @@ char	**stringp;
 FILE	*file;
 {
     unsigned short  len;
-    char	    *data, *malloc ();
+//    char	    *data, *malloc ();
+    char	    *data;
 
     if (read_short (&len, file) == 0)
 	return 0;
@@ -76,7 +78,7 @@ FILE	*auth_file;
 {
     Xauth   local;
     Xauth   *ret;
-    char    *malloc ();
+//    char    *malloc ();
 
     if (read_short (&local.family, auth_file) == 0)
 	return 0;

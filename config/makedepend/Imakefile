@@ -41,7 +41,7 @@ INCLUDES = -I$(IMAKESRC) -I$(TOP)/include $(TOP_X_INCLUDES)/X11
  XBSDLIB = /**/
 #endif
 
-AllTarget(ProgramTargetName(makedepend))
+AllTarget(makedepend)
 
 /*
  * bootstrapping: want to build the real makedepend

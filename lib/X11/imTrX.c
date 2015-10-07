@@ -106,6 +106,12 @@ _XimXFilterWaitEvent(d, w, ev, arg)
     Xim		 im = (Xim)arg;
     XSpecRec	*spec = (XSpecRec *)im->private.proto.spec;
 
+    if (ev->type == ClientMessage &&
+	ev->xclient.message_type != spec->improtocolid &&
+	ev->xclient.message_type != spec->imconnectid &&
+	ev->xclient.message_type != spec->immoredataid)
+      return False;
+    
     spec->ev = (XPointer)ev;
     return _XimFilterWaitEvent(im);
 }

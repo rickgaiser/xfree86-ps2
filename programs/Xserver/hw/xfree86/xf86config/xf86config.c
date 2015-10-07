@@ -107,7 +107,7 @@
 #endif
 
 /*
- * Define this to have /etc/XF86Config prompted for as the default
+ * Define this to have /etc/X11/XF86Config prompted for as the default
  * location to write the XF86Config file to.
  */
 #define PREFER_XF86CONFIG_IN_ETC
@@ -215,7 +215,7 @@ static char *intro_text =
 "This program will create a basic " CONFIGNAME " file, based on menu selections you\n"
 "make.\n"
 "\n"
-"The " CONFIGNAME " file usually resides in " TREEROOTLX " or /etc. A sample\n"
+"The " CONFIGNAME " file usually resides in " TREEROOTLX " or /etc/X11. A sample\n"
 CONFIGNAME " file is supplied with XFree86; it is configured for a standard\n"
 "VGA card and monitor with 640x480 resolution. This program will ask for a\n"
 "pathname when it is ready to write the file.\n"
@@ -2986,7 +2986,7 @@ char *ask_XF86Config_location() {
 #endif
 #ifdef PREFER_XF86CONFIG_IN_ETC
 #if !(defined(__QNX__) && !defined(__QNXNTO__))
-		printf("Shall I write it to /etc/XF86Config? ");
+		printf("Shall I write it to /etc/X11/XF86Config? ");
 #else
 		printf("Shall I write it to /etc/config/X11/XF86Config.%d? ", 
 			getnid());
@@ -2995,7 +2995,7 @@ char *ask_XF86Config_location() {
 		printf("\n");
 		if (answerisyes(s))
 #if !(defined(__QNX__) && !defined(__QNXNTO__))
-			return "/etc/XF86Config";
+			return "/etc/X11/XF86Config";
 #else
 			/* In QNX, use XF86Config.nid for filename */
 			{
@@ -3030,11 +3030,11 @@ char *ask_XF86Config_location() {
 #endif
   
   #ifndef PREFER_XF86CONFIG_IN_ETC
-  		printf("Shall I write it to /etc/XF86Config? ");
+  		printf("Shall I write it to /etc/X11/XF86Config? ");
 		getstring(s);
 		printf("\n");
 		if (answerisyes(s))
-			return "/etc/XF86Config";
+			return "/etc/X11/XF86Config";
 #endif
 #else /* __EMX__ */
 	{

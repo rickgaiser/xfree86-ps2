@@ -465,7 +465,7 @@ ScrnInsertChar (
 	    memset(colors + col, xtermColorPair(), n);
 	})
 	if_OPT_DEC_CHRSET({
-	    Char *csets = BUF_CSETS(sb, row);
+	    Char *csets = _BUF_CSETS(sb, row);
 	    memmove(csets + col + n, csets + col, nbytes);
 	    memset(csets + col, curXtermChrSet(row), n);
 	})
@@ -503,7 +503,7 @@ ScrnDeleteChar (
 	    memset(colors + size - n, xtermColorPair(), n);
 	})
 	if_OPT_DEC_CHRSET({
-	    Char *csets = BUF_CSETS(sb, row);
+	    Char *csets = _BUF_CSETS(sb, row);
 	    memmove(csets + col, csets + col + n, nbytes);
 	    memset(csets + size - n, curXtermChrSet(row), n);
 	})
@@ -778,7 +778,7 @@ ClearBufRows (
 		memset(BUF_COLOR(buf, row), xtermColorPair(), len);
 	    })
 	    if_OPT_DEC_CHRSET({
-		memset(BUF_CSETS(buf, row), 0, len);
+		memset(_BUF_CSETS(buf, row), 0, len);
 	    })
 	}
 }

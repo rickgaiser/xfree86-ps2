@@ -126,7 +126,6 @@ SOFTWARE.
 
 #define _XIEC_MIREGION
 
-#include <stdio.h>
 #include <memory.h>
 
 #include "miscstruct.h"

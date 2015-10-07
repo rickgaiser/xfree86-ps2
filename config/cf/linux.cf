@@ -139,7 +139,7 @@ XCOMM binutils:	(LinuxBinUtilsMajorVersion)
 #define HasMkstemp		YES
 #endif
 #ifndef HasPam
-#define HasPam			NO
+#define HasPam			YES
 #endif
 
 #define AvoidNullMakeCommand	YES
@@ -284,6 +284,27 @@ XCOMM binutils:	(LinuxBinUtilsMajorVersion)
 #define ServerExtraDefines     -DGCCUSESGAS XFree86ServerDefines
 #endif /* Arm */
 
+#ifdef MipsArchitecture
+#ifndef OptimizedCDebugFlags
+#define OptimizedCDebugFlags	-Os -g
+#endif
+#ifndef LinuxMachineDefines
+#define LinuxMachineDefines	-D__mips__
+#endif
+#ifndef ServerOSDefines
+#define ServerOSDefines		XFree86ServerOSDefines -DDDXTIME -DPART_NET
+#endif
+#ifndef ServerExtraDefines
+#define ServerExtraDefines	-DGCCUSESGAS XFree86ServerDefines
+#endif
+#ifndef SeparateSharedCompile
+#define SeparateSharedCompile	NO
+#endif
+#ifndef AsCmd
+#define AsCmd			gcc -x assembler-with-cpp -c
+#endif
+#endif /* MipsArchitecture */
+
 #define StandardDefines		-Dlinux LinuxMachineDefines LinuxSourceDefines
 
 #ifndef TermcapLibrary
@@ -344,3 +365,7 @@ XCOMM binutils:	(LinuxBinUtilsMajorVersion)
 
 #include <lnxLib.rules>
 #include <xfree86.cf>
+
+#ifndef XtermWithI18N
+#define XtermWithI18N YES
+#endif

@@ -347,8 +347,10 @@ int srcw,srch,dst_x , dst_y ;
          {
 	   old_pixel = XGetPixel(reg_image,j,i) ;
 
+#if 0
            if( reg->vis->map_entries == 16) {
-	
+#endif
+
                  red_ind = (old_pixel & reg->vis->red_mask) >> rShift ;
 	         green_ind = (old_pixel & reg->vis->green_mask) >> gShift ;
 	         blue_ind = (old_pixel & reg->vis->blue_mask) >> bShift ;
@@ -358,9 +360,11 @@ int srcw,srch,dst_x , dst_y ;
 			      |((colors[green_ind].green >> 8) << GREEN_SHIFT)
 			      |((colors[blue_ind].blue >> 8) << BLUE_SHIFT)
                              );
+#if 0
            }
 	   else  
 		new_pixel = old_pixel;
+#endif
 
            XPutPixel(target_image,dst_x+j, dst_y+i,new_pixel);
 	   

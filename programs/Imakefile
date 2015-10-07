@@ -17,7 +17,7 @@ XCOMM $XFree86: xc/programs/Imakefile,v 3.15.2.2 1998/02/15 16:08:40 hohndel Exp
 #if BuildXKBlib
       XKBSRCDIRS = setxkbmap xkbcomp xkbevd xkbprint xkbutils
 #endif
-#if BuildScreenSaverExt
+#if BuildScreenSaverExt && BuildScreenSaverLibrary
 SCREENSAVESRCDIR = beforelight
 #endif
 #if BuildXF86VidModeExt

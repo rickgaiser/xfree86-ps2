@@ -2596,6 +2596,13 @@ spawn (void)
 	}
 #endif	/* sun vs TIOCSWINSZ */
 
+	/* XXX hotwire Red Hat Linux */
+#undef UTMP
+	if (!resource.utmpInhibit) {
+	    addToUtmp(ttydev, NULL, screen->respond);
+	    added_utmp_entry = True;
+	}
+
 	if (!am_slave) {
 #ifdef USE_HANDSHAKE
 	    if (pipe(pc_pipe) || pipe(cp_pipe))
@@ -4043,6 +4050,11 @@ SIGNAL_T
 Exit(int n)
 {
 	register TScreen *screen = &term->screen;
+
+	/* XXX hotwire Red Hat Linux */
+	if (!resource.utmpInhibit && added_utmp_entry)
+	    removeFromUtmp();
+
 #ifdef UTMP
 #ifdef USE_SYSV_UTMP
 #if defined(SVR4) || defined(SCO325)

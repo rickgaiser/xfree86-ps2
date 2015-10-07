@@ -78,6 +78,7 @@ extern char *progname;
 
 Bool        UseSyslog;
 char        ErrorFile[PATH_MAX];
+int         log_open = 0;
 
 static void
 abort_server()

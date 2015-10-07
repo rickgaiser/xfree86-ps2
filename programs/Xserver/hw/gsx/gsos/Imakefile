@@ -1,0 +1,22 @@
+RAPINC = 
+RAPLIB =
+
+#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+
+SRCS = gsos.c
+OBJS = gsos.o
+LIB = gsos
+INCL = gsos.h
+
+DEFINES = -DPSZ=32
+
+INCLUDES = -I. -I.. $(RAPINC)
+LOCAL_LDFLAGS =
+CDEBUGFLAGS = -g -Wall -DDEBUG -DJDEBUG -Dlint
+
+NormalLibraryObjectRule()
+NormalLibraryTarget($(LIB), $(OBJS))
+NormalLintTarget( $(SRCS) )
+DependTarget()
+
+

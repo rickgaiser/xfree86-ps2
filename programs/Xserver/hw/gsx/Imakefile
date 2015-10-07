@@ -1,0 +1,49 @@
+XCOMM 
+
+#include <Server.tmpl>
+#define IHaveSubdirs
+
+SUBDIRS = common gsos
+
+SRCS =	gsxgc.c gsxcpyarea.c \
+    gsxfillarc.c gsxfillply.c gsxfillrct.c gsxfillsp.c \
+    gsxglblt.c gsximage.c gsxmisc.c \
+    gsxpolyarc.c gsxpolylin.c gsxpolypnt.c gsxpolyrct.c gsxpolyseg.c \
+    gsxpushpix.c gsxtext.c gsxscrinit.c gsxinit.c gsxbstore.c gsxcmap.c \
+    gsxwindow.c gsxtile.c gsxdseg.c gsxdline.c gsxdispcur.c gsxsprite.c
+
+OBJS =	gsxgc.o gsxcpyarea.o \
+    gsxfillarc.o gsxfillply.o gsxfillrct.o gsxfillsp.o \
+    gsxglblt.o gsximage.o gsxmisc.o \
+    gsxpolyarc.o gsxpolylin.o gsxpolypnt.o gsxpolyrct.o gsxpolyseg.o \
+    gsxpushpix.o gsxtext.o gsxscrinit.o gsxinit.o gsxbstore.o gsxcmap.o \
+    gsxwindow.o gsxtile.o gsxdseg.o gsxdline.o gsxdispcur.o gsxsprite.o
+
+GSXOBJS = $(GLSUBOBJS)
+
+SERVERSRC = ../..
+XINCLUDESRC = ../../../../include
+
+INCLUDES = -I../common -I../../mfb -I../../cfb \
+	-I../../mi -I$(SERVERSRC)/include -I$(INCLUDESRC) \
+	-I$(XINCLUDESRC)/fonts -I$(GLXINC) -I$(EXTENSIONSRC)/include \
+	-I$(XINCLUDESRC) -I./gsos
+
+#LINTLIBS = ../../../dix/llib-ldix.ln ../../../os/llib-los.ln \
+#	../../mi/llib-lmi.ln ../../mfb/llib-lmfb.ln \
+#	../../cfb/llib-lcfb.ln ../../cfb16/llib-lcfb.ln \
+#	../../cfb32/llib-lcfb.ln ../common/llib-lcommon.ln
+
+DEFINES = -DPSZ=32 $(EXT_DEFINES)
+CDEBUGFLAGS += -Wall
+
+NormalLibraryObjectRule()
+NormalLibraryTarget(gsx,$(OBJS))
+
+DependTarget()
+#LintLibraryTarget(gaix,$(SRCS))
+#NormalLintTarget($(SRCS))
+
+MakeSubdirs($(SUBDIRS))
+DependSubdirs($(SUBDIRS))
+

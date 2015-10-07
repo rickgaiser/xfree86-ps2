@@ -88,10 +88,9 @@ extern void CYRIXAccelInit();
 #define CYRIXsetVectorMode()                 \
                      GX_REG(GP_VECTOR_MODE)  = (vectorMode)
 
-#define IfDest(rop, planemask, val)                                        \
-                                 (( (((rop) & 0x5) ^ (((rop) & 0xA) >> 1)) \
-                                 || (~((planemask) & 0xFF))                \
-                                 ) ? (val) : 0)
+#define IfDest(xrop, val)   ((((xrop) & 0x5) ^ (((xrop) & 0xA) >> 1)) ? (val) : 0)
+
+
 
 /* Generic MediaGX hardware register and value definitions */
 

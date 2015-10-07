@@ -91,7 +91,6 @@ terms and conditions:
 #define _XIEC_MEMORY	/* for XieMalloc and XieFree, used in jmemsys.c */
 #define XIE_SUPPORTED
 #include <X11/Xos.h>
-#include <stdio.h>
 #include "misc.h" /* for pointer ;*/
 
 #ifndef X_NOT_STDC_ENV

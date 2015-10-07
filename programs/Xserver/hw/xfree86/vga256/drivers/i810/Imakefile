@@ -13,7 +13,7 @@ DEFINES = -DPSZ=8
 #if XF86LinkKit
 INCLUDES = -I. -I../../../include -I../../../include/X11 -I../..
 #else
-INCLUDES = -I. -I$(XF86COMSRC) -I$(XF86HWSRC) -I$(XF86OSSRC) \
+INCLUDES = -I. -I./os-support/linux -I$(XF86COMSRC) -I$(XF86HWSRC) -I$(XF86OSSRC) \
            -I$(SERVERSRC)/mfb -I$(SERVERSRC)/mi \
            -I$(SERVERSRC)/cfb -I../../vga -I../../../xaa \
            -I$(FONTINCSRC) -I$(SERVERSRC)/include -I$(XINCLUDESRC)

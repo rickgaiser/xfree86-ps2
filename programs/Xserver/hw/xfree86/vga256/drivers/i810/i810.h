@@ -167,9 +167,11 @@ extern int I810_DEBUG;
 #define PCI_CHIP_I810              0x7121
 #define PCI_CHIP_I810_DC100        0x7123
 #define PCI_CHIP_I810_E            0x7125 
+#define PCI_CHIP_I815              0x1132
 #define PCI_CHIP_I810_BRIDGE       0x7120
 #define PCI_CHIP_I810_DC100_BRIDGE 0x7122
 #define PCI_CHIP_I810_E_BRIDGE     0x7124
+#define PCI_CHIP_I815_BRIDGE       0x1130
 #endif
 
 #endif

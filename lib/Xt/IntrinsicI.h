@@ -196,7 +196,7 @@ SOFTWARE.
 #endif
 
 #ifndef ERRORDB
-#define ERRORDB "/usr/lib/X11/XtErrorDB"
+#define ERRORDB "/usr/lib/X11/XErrorDB"
 #endif
 
 extern String XtCXtToolkitError;

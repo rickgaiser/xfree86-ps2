@@ -1,0 +1,114 @@
+#
+# Sample XGSConfig File
+#
+
+Section "Files"
+   RgbPath    "/usr/X11R6/lib/X11/rgb"
+
+#   FontPath   "/usr/X11R6/lib/X11/fonts/100dpi"
+#   FontPath   "/usr/X11R6/lib/X11/fonts/75dpi"
+#   FontPath   "/usr/X11R6/lib/X11/fonts/Speedo"
+#   FontPath   "/usr/X11R6/lib/X11/fonts/Type1"
+#   FontPath   "/usr/X11R6/lib/X11/fonts/cyrillic"
+#   FontPath   "/usr/X11R6/lib/X11/fonts/local"
+#   FontPath   "/usr/X11R6/lib/X11/fonts/misc"
+
+#   FontPath   "unix/:-1"
+
+	FontPath	"/usr/X11R6/lib/X11/fonts/75dpi:unscaled"
+        FontPath	"/usr/X11R6/lib/X11/fonts/100dpi:unscaled"
+        FontPath	"/usr/X11R6/lib/X11/fonts/misc"
+	FontPath	"/usr/X11R6/lib/X11/fonts/Speedo"
+	FontPath	"/usr/X11R6/lib/X11/fonts/Type1"
+	FontPath	"/usr/X11R6/lib/X11/fonts/75dpi"
+	FontPath	"/usr/X11R6/lib/X11/fonts/100dpi"
+	FontPath        "/usr/X11R6/lib/X11/fonts/cyrillic"
+	FontPath        "/usr/X11R6/lib/X11/fonts/japanese"
+	FontPath        "/usr/share/fonts/default/Type1"
+
+EndSection
+
+Section "Keyboard"
+   Protocol        "Standard"
+   AutoRepeat      500 5
+   LeftAlt         Meta
+   RightAlt        Meta
+   ScrollLock      Compose
+   RightCtl        Control
+   XkbKeycodes     "xfree86"
+   XkbTypes        "default"
+   XkbCompat       "default"
+   XkbGeometry     "pc"
+   XkbRules        "xfree86"
+   XkbSymbols      "us(pc101)"
+   XkbModel        "pc101"
+   XkbLayout       "us"
+#   XkbSymbols      "jp"
+#   XkbModel        "jp106"
+#   XkbLayout       "jp"
+   XkbOptions      "ctrl:nocaps"
+EndSection
+
+Section "Pointer"
+   Protocol        "ps/2"
+   Device          "/dev/mouse"
+   Emulate3Timeout 50
+   Emulate3Buttons
+EndSection
+
+Section "Screen"
+   Driver          "gsx"
+   Device          "Graphics Synthesizer"
+#   DefaultColorDepth 24
+   DefaultColorDepth 16
+#   FrameRate	   60
+   FrameRate	   75
+   VideoMode       "VESA"
+#   VideoMode       "NTSC" "interlace"
+#   VideoMode       "PAL"  "nointerlace"
+#   VideoMode       "DTV"
+#   interlace-mix  35
+   SubSection "Display"
+      Depth        16
+#      Modes	   "480p" "720p" "1080i"
+#      Modes        "1280x1024" "1024x768" "800x600" "640x480"
+      Modes        "1024x768" "800x600" "1280x1024" "640x480"
+   EndSubSection
+   SubSection "Display"
+      Depth        24
+#      Modes	   "480p" "720p" 
+      Modes        "1024x768" "800x600" "640x480"
+   EndSubSection
+EndSection
+
+Section "Module"
+#	Load "xf86Jstk.so"
+	Load "ps2Pad.so"
+EndSection 
+
+Section "XInput"
+#	SubSection "joystick"
+#		Port "/dev/js0"
+#		MaximumXposition	255
+#		MinimumXposition	1
+#		MaximumYposition	255
+#		MinimumYposition	1
+#		CenterX			128
+#		CenterY			128
+#		Delta			4
+#		AlwaysCore
+#		TimeOut			100
+#	EndSubSection
+
+	SubSection "ps2pad"
+#		CenterX			128
+#		CenterY			128
+#		DeadZone		16
+#		Scale			0.005
+#		AlwaysCore
+#		TimeOut			16
+#		Button1			CIRCLE
+#		Button2			CROSS
+#		Button3			SQUARE
+	EndSubSection
+EndSection

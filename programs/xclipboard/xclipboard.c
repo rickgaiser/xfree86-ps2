@@ -65,7 +65,8 @@ typedef struct _Clip {
     int		    avail;
 } ClipRec, *ClipPtr;
 
-extern char *malloc ();
+//extern char *malloc (); --- for old compiler only
+extern void *malloc ();
 
 static Atom wm_delete_window;
 static Atom wm_protocols;

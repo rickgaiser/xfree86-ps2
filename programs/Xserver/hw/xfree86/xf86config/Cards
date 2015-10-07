@@ -1878,10 +1878,12 @@ NAME ATI Rage LT PRO
 SEE ATI Mach64 with Internal RAMDAC
 
 NAME ATI Rage Mobility
-SEE ATI Mach64 with Internal RAMDAC
+CHIPSET ATI-Mach64
+SERVER SVGA
+NOCLOCKPROBE
 
 NAME ATI Rage Mobility P
-SEE ATI Mach64 with Internal RAMDAC
+SEE ATI Rage Mobility
 
 
 NAME ASUS PCI-V264CT
@@ -2404,7 +2406,7 @@ NOCLOCKPROBE
 NAME SiS 6326
 CHIPSET SiS6326
 SERVER SVGA
-LINE     # Option "no_accel" # Use this if acceleration is causing problems
+LINE     Option "no_accel" # Use this if acceleration is causing problems
 LINE     # Option "fifo_moderate" 
 LINE     # Option "fifo_conserv" 
 LINE     # Option "fifo_aggresive" 
@@ -2454,6 +2456,9 @@ SEE SiS 5597
 
 NAME Diamond SpeedStar A50
 SEE SiS 6326
+LINE     Option "sw_cursor"
+LINE     Option "no_imageblt"
+LINE     Option "no_bitblt"
 
 NAME AOpen PA50D
 SEE SiS 6326
@@ -2886,6 +2891,7 @@ LINE #    Option     "mmio"
 LINE #    Option     "no_mmio"
 LINE #    Option     "lcd_center"
 LINE #    Option     "no_stretch"
+LINE     Option     "override_validate_mode"
 
 # Epson SPC8110
 
@@ -3089,6 +3095,20 @@ SEE Intel 740 (generic)
 
 NAME Winfast S900 i740 AGP 8MB
 SEE Intel 740 (generic)
+
+
+NAME Intel i810 (generic)
+CHIPSET Intel i810
+SERVER SVGA
+NOCLOCKPROBE
+LINE     #Option     "no_accel"
+
+NAME Intel i815 (generic)
+CHIPSET Intel i815
+SERVER SVGA
+NOCLOCKPROBE
+LINE     #Option     "no_accel"
+
 
 NAME Voodoo Banshee (generic)
 CHIPSET Voodoo Banshee
